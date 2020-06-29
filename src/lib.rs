@@ -43,6 +43,8 @@ impl Ord for Janet {
             -1 => Ordering::Less,
             0 => Ordering::Equal,
             1 => Ordering::Greater,
+            // SAFETY: Janet ensures that the only values that `janet_compare` will return is `0`,
+            // `1` and `-1`.
             _ => unsafe { core::hint::unreachable_unchecked() },
         }
     }
