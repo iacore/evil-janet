@@ -7,6 +7,12 @@ description = "Low level bindings to the janet language c api."
 repository = "https://github.com/andrewchambers/janet-ll"
 license-file = "LICENSE"
 
+[package.metadata.docs.rs]
+targets = ["x86_64-unknown-linux-gnu", "x86_64-unknown-freebsd",
+    "x86_64-unknown-netbsd", "x86_64-apple-darwin", "x86_64-sun-solaris",
+    "x86_64-fuchsia", "aarch64-unknown-linux-gnu", "i686-unknown-linux-gnu",
+    "x86_64-pc-windows-gnu", "x86_64-pc-windows-msvc"]
+
 [features]
 
 default = []
@@ -20,4 +26,3 @@ link-amalg = []
 bindgen = "0.54.0"
 shlex = "0.1.1"
 cc = "1.0"
-
