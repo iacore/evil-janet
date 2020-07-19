@@ -1,4 +1,4 @@
-# janet-ll
+# evil-janet
 
 This is a rust crate providing low level bindings to the [janet](https://janet-lang.org/) C API.
 
@@ -16,6 +16,6 @@ for building standalone janet modules.
 
 # safety
 
-This crate makes no attempt at ergonomics or memory safety.
+This crate makes no attempt memory safety.
 It is the bare minimum required to use the janet api from
 rust. Higher level crates may come in the future.
