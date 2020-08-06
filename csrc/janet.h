@@ -225,6 +225,11 @@ extern "C" {
  * To turn of nanboxing, for debugging purposes or for certain
  * architectures (Nanboxing only tested on x86 and x64), comment out
  * the JANET_NANBOX define.*/
+
+#if defined(_M_ARM64) || defined(_M_ARM) || defined(__aarch64__)
+#define JANET_NO_NANBOX
+#endif
+
 #ifndef JANET_NO_NANBOX
 #ifdef JANET_32
 #define JANET_NANBOX_32
@@ -1381,7 +1386,7 @@ JANET_API int janet_verify(JanetFuncDef *def);
 JANET_API JanetBuffer *janet_pretty(JanetBuffer *buffer, int depth, int flags, Janet x);
 
 /* Misc */
-#ifndef JANET_NO_PRF
+#ifdef JANET_PRF
 #define JANET_HASH_KEY_SIZE 16
 JANET_API void janet_init_hash_key(uint8_t key[JANET_HASH_KEY_SIZE]);
 #endif
@@ -1539,6 +1544,8 @@ JANET_API FILE *janet_getfile(const Janet *argv, int32_t n, int32_t *flags);
 JANET_API FILE *janet_dynfile(const char *name, FILE *def);
 JANET_API JanetAbstract janet_checkfile(Janet j);
 JANET_API FILE *janet_unwrapfile(Janet j, int32_t *flags);
+
+int janet_cryptorand(uint8_t *out, size_t n);
 
 /* Marshal API */
 JANET_API void janet_marshal_size(JanetMarshalContext *ctx, size_t value);
