@@ -1,10 +1,14 @@
 fn main() {
+    // Cause compilation error when both almagation and link-system is set
+    #[cfg(all(feature = "link-amalg", feature = "link-system"))]
+    compile_error!(r#"You can only use either "link-amalg" or "system" feature, not both."#);
+
     // Cause compilation error when both almagation and system is set
     #[cfg(all(feature = "link-amalg", feature = "system"))]
     compile_error!(r#"You can only use either "link-amalg" or "system" feature, not both."#);
 
     // Link to the system libjanet if the system feature is included
-    #[cfg(feature = "system")]
+    #[cfg(feature = "link-system")]
     println!("cargo:rustc-link-lib=janet");
 
     // Make cargo rerun if header changes
@@ -12,12 +16,12 @@ fn main() {
 
     let whitelist_regex = "^[jJ]anet|ANET.*";
 
-    #[cfg(feature = "system")]
+    #[cfg(any(feature = "system", feature = "link-system"))]
     let header = std::env::var("JANET_HEADERPATH")
         .expect("JANET_HEADERPATH not found, maybe you don't have Janet installed.")
         + "/janet.h";
 
-    #[cfg(not(feature = "system"))]
+    #[cfg(not(any(feature = "system", feature = "link-system")))]
     let header = "./csrc/janet.h";
 
     let bindings = bindgen::Builder::default()
@@ -29,7 +33,7 @@ fn main() {
         .generate()
         .expect("Unable to generate bindings");
 
-    #[cfg(all(feature = "link-amalg", not(feature = "system")))]
+    #[cfg(all(feature = "link-amalg", not(feature = "link-system")))]
     cc::Build::new()
         .file("csrc/janet.c")
         .include("csrc")

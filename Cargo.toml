@@ -1,6 +1,6 @@
 [package]
 name = "evil-janet"
-version = "1.11.4"
+version = "1.11.5"
 authors = ["Eric Shimizu Karbstein <gr41.j4ck@gmail.com>", "Andrew Chambers <ac@acha.ninja>"]
 edition = "2018"
 description = "Low level bindings to the janet language c api."
@@ -19,7 +19,9 @@ features = ["link-amalg"]
 default = []
 # Link the amalgamation library into the application.
 link-amalg = []
-# Link to system Janet (not recommended generally)
+# Link to the libjanet library from system (not recommended generally)
+link-system = []
+# Use header from system Janet
 system = []
 
 [dependencies]
