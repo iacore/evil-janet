@@ -15,7 +15,9 @@ impl fmt::Debug for Janet {
 
 impl PartialEq<Janet> for Janet {
     #[inline]
-    fn eq(&self, other: &Janet) -> bool { unsafe { janet_equals(*self, *other) != 0 } }
+    fn eq(&self, other: &Janet) -> bool {
+        unsafe { janet_equals(*self, *other) != 0 }
+    }
 }
 
 impl Eq for Janet {}
