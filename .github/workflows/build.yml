@@ -8,16 +8,16 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        rust: [1.38.0, stable, beta, nightly]
+        rust: [1.40.0, stable, beta, nightly]
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions-rs/toolchain@v1
-      with:
-        toolchain: ${{ matrix.rust }}
-        override: true
-        profile: minimal
-    - name: Check and Run tests
-      run: cargo test --features link-amalg --verbose
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: ${{ matrix.rust }}
+          override: true
+          profile: minimal
+      - name: Check and Run tests
+        run: cargo test --features link-amalg --verbose
 
   build-macos:
     runs-on: ${{ matrix.os }}
@@ -26,15 +26,14 @@ jobs:
         os: [macOS-latest]
         rust: [1.38.0, stable, beta, nightly]
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions-rs/toolchain@v1
-      with:
-        toolchain: ${{ matrix.rust }}
-        override: true
-        profile: minimal
-    - name: Check and Run tests
-      run: cargo test --features link-amalg --verbose
-
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: ${{ matrix.rust }}
+          override: true
+          profile: minimal
+      - name: Check and Run tests
+        run: cargo test --features link-amalg --verbose
   # build-windows:
   #   runs-on: ${{ matrix.os }}
   #   strategy:
