@@ -2,7 +2,11 @@
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
 
-use core::{cmp::Ordering, fmt};
+use core::{
+    cmp::Ordering,
+    fmt,
+    hash::{Hash, Hasher},
+};
 
 include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
 
@@ -21,6 +25,13 @@ impl PartialEq<Janet> for Janet {
 }
 
 impl Eq for Janet {}
+
+impl Hash for Janet {
+    #[inline]
+    fn hash<H: Hasher>(&self, state: &mut H) {
+        state.write_i32(unsafe { janet_hash(*self) })
+    }
+}
 
 impl PartialOrd<Janet> for Janet {
     #[inline]
