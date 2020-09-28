@@ -14,7 +14,7 @@ fn main() {
     // Make cargo rerun if header changes
     println!("cargo:rerun-if-changed=csrc/janet.h");
 
-    let whitelist_regex = "^[jJ]anet|ANET.*";
+    let whitelist_regex = "^([jJ]anet|ANET.*)|(.*jmp)";
 
     #[cfg(any(feature = "system", feature = "link-system"))]
     let header = std::env::var("JANET_HEADERPATH")
