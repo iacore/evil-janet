@@ -2,7 +2,7 @@
 
 set -eux
 
-version="1.12.2"
+version="1.13.1"
 
 if ! test -d ./janet/.git
 then
@@ -18,4 +18,4 @@ make
 mkdir -p ../csrc
 cp build/janet.c ../csrc/
 cp build/janet.h ../csrc/
-cp src/conf/janetconf.h ../csrc/
+# cp src/conf/janetconf.h ../csrc/
