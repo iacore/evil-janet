@@ -1,6 +1,6 @@
 [package]
 name = "evil-janet"
-version = "1.14.1"
+version = "1.15.2"
 authors = ["Eric Shimizu Karbstein <gr41.j4ck@gmail.com>", "Andrew Chambers <ac@acha.ninja>"]
 edition = "2018"
 description = "Low level bindings to the janet language c api."
@@ -27,5 +27,5 @@ system = []
 [dependencies]
 
 [build-dependencies]
-bindgen = "0.56"
+bindgen = "0.57"
 cc = "1.0"

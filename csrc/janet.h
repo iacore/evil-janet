@@ -26,10 +26,10 @@
 #define JANETCONF_H
 
 #define JANET_VERSION_MAJOR 1
-#define JANET_VERSION_MINOR 14
-#define JANET_VERSION_PATCH 1
+#define JANET_VERSION_MINOR 15
+#define JANET_VERSION_PATCH 2
 #define JANET_VERSION_EXTRA ""
-#define JANET_VERSION "1.14.1"
+#define JANET_VERSION "1.15.2"
 
 /* #define JANET_BUILD "local" */
 
@@ -1379,6 +1379,7 @@ typedef struct {
 #define JANET_EV_TCTAG_ERR_STRING 5   /* cancel with janet_cstringv((const char *) argp) */
 #define JANET_EV_TCTAG_ERR_STRINGF 6  /* cancel with janet_cstringv((const char *) argp), then call free on argp. */
 #define JANET_EV_TCTAG_ERR_KEYWORD 7  /* cancel with janet_ckeywordv((const char *) argp) */
+#define JANET_EV_TCTAG_BOOLEAN 8      /* resume with janet_wrap_boolean(argi) */
 
 /* Function pointer that is run in the thread pool */
 typedef JanetEVGenericMessage(*JanetThreadedSubroutine)(JanetEVGenericMessage arguments);
@@ -1388,7 +1389,7 @@ typedef void (*JanetThreadedCallback)(JanetEVGenericMessage return_value);
 
 /* API calls for quickly offloading some work in C to a new thread or thread pool. */
 JANET_API void janet_ev_threaded_call(JanetThreadedSubroutine fp, JanetEVGenericMessage arguments, JanetThreadedCallback cb);
-JANET_API void janet_ev_threaded_await(JanetThreadedSubroutine fp, int tag, int argi, void *argp);
+JANET_NO_RETURN JANET_API void janet_ev_threaded_await(JanetThreadedSubroutine fp, int tag, int argi, void *argp);
 
 /* Callback used by janet_ev_threaded_await */
 JANET_API void janet_ev_default_threaded_callback(JanetEVGenericMessage return_value);
@@ -1421,6 +1422,7 @@ JANET_API void janet_parser_deinit(JanetParser *parser);
 JANET_API void janet_parser_consume(JanetParser *parser, uint8_t c);
 JANET_API enum JanetParserStatus janet_parser_status(JanetParser *parser);
 JANET_API Janet janet_parser_produce(JanetParser *parser);
+JANET_API Janet janet_parser_produce_wrapped(JanetParser *parser);
 JANET_API const char *janet_parser_error(JanetParser *parser);
 JANET_API void janet_parser_flush(JanetParser *parser);
 JANET_API void janet_parser_eof(JanetParser *parser);
@@ -1460,6 +1462,7 @@ JANET_API JanetCompileResult janet_compile(Janet source, JanetTable *env, JanetS
 
 /* Get the default environment for janet */
 JANET_API JanetTable *janet_core_env(JanetTable *replacements);
+JANET_API JanetTable *janet_core_lookup_table(JanetTable *replacements);
 
 JANET_API int janet_dobytes(JanetTable *env, const uint8_t *bytes, int32_t len, const char *sourcePath, Janet *out);
 JANET_API int janet_dostring(JanetTable *env, const char *str, const char *sourcePath, Janet *out);
