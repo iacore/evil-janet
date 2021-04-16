@@ -14,7 +14,7 @@ fn main() {
     // Make cargo rerun if header changes
     println!("cargo:rerun-if-changed=csrc/janet.h");
 
-    let whitelist_regex = "^[jJ]anet|ANET.*|.*jmp";
+    let allowlist_regex = "^[jJ]anet|ANET.*|.*jmp";
 
     #[cfg(any(feature = "system", feature = "link-system"))]
     let header = std::env::var("JANET_HEADERPATH")
@@ -26,9 +26,9 @@ fn main() {
 
     let bindings = bindgen::Builder::default()
         .header(header)
-        .whitelist_type(whitelist_regex)
-        .whitelist_function(whitelist_regex)
-        .whitelist_var(whitelist_regex)
+        .allowlist_type(allowlist_regex)
+        .allowlist_function(allowlist_regex)
+        .allowlist_var(allowlist_regex)
         .rustfmt_bindings(true)
         .generate()
         .expect("Unable to generate bindings");
