@@ -29,9 +29,12 @@ fn main() {
         .allowlist_type(allowlist_regex)
         .allowlist_function(allowlist_regex)
         .allowlist_var(allowlist_regex)
-        .rustfmt_bindings(true)
-        .generate()
-        .expect("Unable to generate bindings");
+        .rustfmt_bindings(true);
+
+    #[cfg(windows)]
+    let bindings = bindings.clang_args(&["--target=x86_64-pc-windows-gnu"]);
+
+    let bindings = bindings.generate().expect("Unable to generate bindings");
 
     #[cfg(all(feature = "link-amalg", not(feature = "link-system")))]
     cc::Build::new()
