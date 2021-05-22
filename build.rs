@@ -37,10 +37,20 @@ fn main() {
     let bindings = bindings.generate().expect("Unable to generate bindings");
 
     #[cfg(all(feature = "link-amalg", not(feature = "link-system")))]
-    cc::Build::new()
-        .file("csrc/janet.c")
-        .include("csrc")
-        .compile("janet");
+    let mut build = cc::Build::new();
+
+    #[cfg(all(feature = "link-amalg", not(feature = "link-system")))]
+    build.file("csrc/janet.c").include("csrc");
+
+    #[cfg(all(
+        feature = "link-amalg",
+        not(feature = "link-system"),
+        feature = "debug-symbols"
+    ))]
+    build.flag("-ggdb3");
+
+    #[cfg(all(feature = "link-amalg", not(feature = "link-system")))]
+    build.compile("janet");
 
     // Write the bindings to the $OUT_DIR/bindings.rs file.
     let out_path = std::path::PathBuf::from(std::env::var("OUT_DIR").unwrap());

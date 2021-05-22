@@ -35,6 +35,8 @@ link-amalg = []
 link-system = []
 # Use header from system Janet
 system = []
+# Compile with max debug symbols
+debug-symbols = []
 
 [dependencies]
 
