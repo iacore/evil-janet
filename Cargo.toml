@@ -11,6 +11,7 @@ repository = "https://github.com/andrewchambers/janet-ll"
 license-file = "LICENSE"
 categories = ["external-ffi-bindings"]
 keywords = ["janet", "embedding", "ffi"]
+exclude = ["/.github", "/.vscode", "/shell.nix", "/update-janet.sh"]
 
 [package.metadata.docs.rs]
 targets = [
