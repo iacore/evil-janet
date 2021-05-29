@@ -2,6 +2,9 @@
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
 #![allow(clippy::missing_safety_doc)]
+#![no_std]
+
+extern crate alloc;
 
 use core::{
     cmp::Ordering,
