@@ -39,11 +39,37 @@ fn main() {
 
     let bindings = bindings.generate().expect("Unable to generate bindings");
 
+    // Redefine some Janet configs using environment variables
+    let recursion_guard = option_env!("JANET_RECURSION_GUARD");
+    let max_proto_depth = option_env!("JANET_MAX_PROTO_DEPTH");
+    let max_macro_expand = option_env!("JANET_MAX_MACRO_EXPAND");
+    let max_stack = option_env!("JANET_STACK_MAX");
+
     #[cfg(all(feature = "link-amalg", not(feature = "link-system")))]
     let mut build = cc::Build::new();
 
     #[cfg(all(feature = "link-amalg", not(feature = "link-system")))]
     build.file("csrc/janet.c").include("csrc");
+
+    #[cfg(all(feature = "link-amalg", not(feature = "link-system")))]
+    if let Some(val) = recursion_guard {
+        build.define("JANET_RECURSION_GUARD", val);
+    }
+
+    #[cfg(all(feature = "link-amalg", not(feature = "link-system")))]
+    if let Some(val) = max_proto_depth {
+        build.define("JANET_MAX_PROTO_DEPTH", val);
+    }
+
+    #[cfg(all(feature = "link-amalg", not(feature = "link-system")))]
+    if let Some(val) = max_macro_expand {
+        build.define("JANET_MAX_MACRO_EXPAND", val);
+    }
+
+    #[cfg(all(feature = "link-amalg", not(feature = "link-system")))]
+    if let Some(val) = max_stack {
+        build.define("JANET_STACK_MAX", val);
+    }
 
     #[cfg(all(
         feature = "link-amalg",
