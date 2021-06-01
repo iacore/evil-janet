@@ -21,13 +21,14 @@ for building standalone janet modules.
 
 # Environment variables
 
-This crate uses environment variables to overwrite soem Janet definitions.
 **These variables are only used when using the feature `link-amalg`**
 
-`JANET_RECURSION_GUARD=<integer>`
-`JANET_MAX_PROTO_DEPTH=<integer>`
-`JANET_MAX_MACRO_EXPAND=<integer>`
-`JANET_STACK_MAX=<integer>`
+This crate uses environment variables to overwrite some Janet definitions.
+
+-   `JANET_RECURSION_GUARD=<integer>`
+-   `JANET_MAX_PROTO_DEPTH=<integer>`
+-   `JANET_MAX_MACRO_EXPAND=<integer>`
+-   `JANET_STACK_MAX=<integer>`
 
 # Safety
 
