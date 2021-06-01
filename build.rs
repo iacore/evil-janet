@@ -40,9 +40,13 @@ fn main() {
     let bindings = bindings.generate().expect("Unable to generate bindings");
 
     // Redefine some Janet configs using environment variables
+    #[cfg(all(feature = "link-amalg", not(feature = "link-system")))]
     let recursion_guard = option_env!("JANET_RECURSION_GUARD");
+    #[cfg(all(feature = "link-amalg", not(feature = "link-system")))]
     let max_proto_depth = option_env!("JANET_MAX_PROTO_DEPTH");
+    #[cfg(all(feature = "link-amalg", not(feature = "link-system")))]
     let max_macro_expand = option_env!("JANET_MAX_MACRO_EXPAND");
+    #[cfg(all(feature = "link-amalg", not(feature = "link-system")))]
     let max_stack = option_env!("JANET_STACK_MAX");
 
     #[cfg(all(feature = "link-amalg", not(feature = "link-system")))]
