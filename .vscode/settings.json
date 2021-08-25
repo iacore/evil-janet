@@ -7,4 +7,5 @@
     "rust-analyzer.cargo.features": [
         "link-amalg"
     ],
+    "C_Cpp.errorSquiggles": "Disabled",
 }

@@ -1,6 +1,6 @@
 [package]
 name = "evil-janet"
-version = "1.16.2"
+version = "1.17.0"
 authors = [
     "Eric Shimizu Karbstein <gr41.j4ck@gmail.com>",
     "Andrew Chambers <ac@acha.ninja>",
@@ -43,5 +43,5 @@ debug-symbols = []
 libc = "0.2"
 
 [build-dependencies]
-bindgen = "0.58"
+bindgen = "0.59"
 cc = "1.0"
