@@ -27,9 +27,9 @@
 
 #define JANET_VERSION_MAJOR 1
 #define JANET_VERSION_MINOR 17
-#define JANET_VERSION_PATCH 1
+#define JANET_VERSION_PATCH 2
 #define JANET_VERSION_EXTRA ""
-#define JANET_VERSION "1.17.1"
+#define JANET_VERSION "1.17.2"
 
 /* #define JANET_BUILD "local" */
 
@@ -70,6 +70,7 @@
 /* #define JANET_OS_NAME my-custom-os */
 /* #define JANET_ARCH_NAME pdp-8 */
 /* #define JANET_EV_NO_EPOLL */
+/* #define JANET_EV_NO_KQUEUE */
 /* #define JANET_NO_INTERPRETER_INTERRUPT */
 
 /* Custom vm allocator support */
@@ -261,6 +262,16 @@ extern "C" {
 #define JANET_EV_EPOLL
 #endif
 
+/* Enable or disable kqueue on BSD */
+#if defined(JANET_BSD) && !defined(JANET_EV_NO_KQUEUE)
+#define JANET_EV_KQUEUE
+#endif
+
+/* Enable or disable kqueue on Apple */
+#if defined(JANET_APPLE) && !defined(JANET_EV_NO_KQUEUE)
+#define JANET_EV_KQUEUE
+#endif
+
 /* How to export symbols */
 #ifndef JANET_API
 #ifdef JANET_WINDOWS
@@ -383,11 +394,16 @@ typedef struct {
 /* Some extra includes if EV is enabled */
 #ifdef JANET_EV
 #ifdef JANET_WINDOWS
-#ifdef JANET_NET
-#include <winsock2.h>
-#endif
-#include <windows.h>
-typedef CRITICAL_SECTION JanetOSMutex;
+typedef struct JanetDudCriticalSection {
+    /* Avoid including windows.h here - instead, create a structure of the same size */
+    /* Needs to be same size as crtical section see WinNT.h for CRITCIAL_SECTION definition */
+    void *debug_info;
+    long lock_count;
+    long recursion_count;
+    void *owning_thread;
+    void *lock_semaphore;
+    unsigned long spin_count;
+} JanetOSMutex;
 #else
 #include <pthread.h>
 typedef pthread_mutex_t JanetOSMutex;
