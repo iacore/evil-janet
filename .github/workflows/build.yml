@@ -4,6 +4,7 @@ on: [push]
 
 jobs:
   build-linux:
+    name: Linux
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -15,10 +16,13 @@ jobs:
           toolchain: ${{ matrix.rust }}
           override: true
           profile: minimal
+      - name: Cache cargo output
+        uses: Swatinem/rust-cache@v1
       - name: Check and Run tests
         run: cargo test --features link-amalg --verbose
 
   build-macos:
+    name: MacOS
     runs-on: macOS-latest
     strategy:
       matrix:
@@ -30,10 +34,13 @@ jobs:
           toolchain: ${{ matrix.rust }}
           override: true
           profile: minimal
+      - name: Cache cargo output
+        uses: Swatinem/rust-cache@v1
       - name: Check and Run tests
         run: cargo test --features link-amalg --verbose
 
   # build-windows:
+  #   name: Windows
   #   runs-on: windows-latest
   #   strategy:
   #     matrix:
@@ -45,10 +52,14 @@ jobs:
   #       toolchain: ${{ matrix.rust }}
   #       override: true
   #       profile: minimal
+  #   - name: Cache cargo output
+  #     uses: Swatinem/rust-cache@v1
   #   - name: Install LLVM and Clang
   #     uses: KyleMayes/install-llvm-action@v1
   #     with:
   #       version: "12.0"
   #       directory: ${{ runner.temp }}/llvm
+  #   - name: Set LIBCLANG_PATH
+  #     run: echo "LIBCLANG_PATH=$((gcm clang).source -replace "clang.exe")" >> $env:GITHUB_ENV
   #   - name: Check and Run tests
   #     run: cargo test --features link-amalg --verbose
