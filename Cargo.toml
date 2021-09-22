@@ -7,7 +7,7 @@ authors = [
 ]
 edition = "2018"
 description = "Low level bindings to the janet language c api."
-repository = "https://github.com/andrewchambers/janet-ll"
+repository = "https://github.com/GrayJack/evil-janet"
 license-file = "LICENSE"
 categories = ["external-ffi-bindings"]
 keywords = ["janet", "embedding", "ffi"]
