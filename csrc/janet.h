@@ -26,10 +26,10 @@
 #define JANETCONF_H
 
 #define JANET_VERSION_MAJOR 1
-#define JANET_VERSION_MINOR 17
-#define JANET_VERSION_PATCH 2
+#define JANET_VERSION_MINOR 18
+#define JANET_VERSION_PATCH 0
 #define JANET_VERSION_EXTRA ""
-#define JANET_VERSION "1.17.2"
+#define JANET_VERSION "1.18.0"
 
 /* #define JANET_BUILD "local" */
 
@@ -206,11 +206,6 @@ extern "C" {
 /* Check sun */
 #ifdef __sun
 #define JANET_NO_UTC_MKTIME
-#endif
-
-/* Check thread library */
-#ifndef JANET_NO_THREADS
-#define JANET_THREADS
 #endif
 
 /* Define how global janet state is declared */
@@ -1591,6 +1586,7 @@ JANET_API int janet_loop_fiber(JanetFiber *fiber);
 
 /* Number scanning */
 JANET_API int janet_scan_number(const uint8_t *str, int32_t len, double *out);
+JANET_API int janet_scan_number_base(const uint8_t *str, int32_t len, int32_t base, double *out);
 JANET_API int janet_scan_int64(const uint8_t *str, int32_t len, int64_t *out);
 JANET_API int janet_scan_uint64(const uint8_t *str, int32_t len, uint64_t *out);
 
@@ -1607,6 +1603,7 @@ JANET_API JanetRNG *janet_default_rng(void);
 JANET_API void janet_rng_seed(JanetRNG *rng, uint32_t seed);
 JANET_API void janet_rng_longseed(JanetRNG *rng, const uint8_t *bytes, int32_t len);
 JANET_API uint32_t janet_rng_u32(JanetRNG *rng);
+JANET_API double janet_rng_double(JanetRNG *rng);
 
 /* Array functions */
 JANET_API JanetArray *janet_array(int32_t capacity);
@@ -2104,7 +2101,8 @@ typedef enum {
     RULE_READINT,      /* [(signedness << 4) | (endianess << 5) | bytewidth, tag] */
     RULE_LINE,         /* [tag] */
     RULE_COLUMN,       /* [tag] */
-    RULE_UNREF         /* [rule, tag] */
+    RULE_UNREF,        /* [rule, tag] */
+    RULE_CAPTURE_NUM   /* [rule, tag] */
 } JanetPegOpcod;
 
 typedef struct {
