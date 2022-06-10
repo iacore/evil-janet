@@ -43,5 +43,5 @@ debug-symbols = []
 libc = "0.2"
 
 [build-dependencies]
-bindgen = "0.59"
+bindgen = "0.60.1"
 cc = "1.0"
