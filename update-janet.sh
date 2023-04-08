@@ -2,7 +2,7 @@
 
 set -eux
 
-version="1.26.0"
+version="1.27.0"
 
 if ! test -d ./janet/.git
 then

@@ -3,6 +3,7 @@
         "array": "c",
         "string_view": "c"
     },
+    "rust-analyzer.check.features": ["link-amalg"],
     "rust-analyzer.checkOnSave.features": ["link-amalg"],
     "rust-analyzer.cargo.features": [
         "link-amalg"
