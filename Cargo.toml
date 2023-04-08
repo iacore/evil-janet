@@ -43,7 +43,7 @@ debug-symbols = []
 libc = "0.2"
 
 [build-dependencies]
-bindgen = { version = "0.61.0", no-default-features = true, features = [
+bindgen = { version = "0.64.0", no-default-features = true, features = [
   "runtime",
   "which-rustfmt",
 ] }
