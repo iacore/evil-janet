@@ -26,14 +26,7 @@ fn main() {
     #[cfg(not(any(feature = "system", feature = "link-system")))]
     let header = "./csrc/janet.h";
 
-    let bindings = bindgen::Builder::default()
-        .header(header)
-        .derive_debug(true)
-        .use_core()
-        .allowlist_type(allowlist_regex)
-        .allowlist_function(allowlist_regex)
-        .allowlist_var(allowlist_regex)
-        .rustfmt_bindings(true);
+    let bindings = bindgen::Builder::default();
 
     let bindings = if is_wasm {
         let emcc_sysroot = std::env::var("EMSCRIPTEN_SYSROOT").ok().unwrap_or_else(|| {
@@ -47,9 +40,17 @@ fn main() {
                 .to_owned()
         });
         bindings.clang_args(["--sysroot", &emcc_sysroot])
+        // todo: bindgen broken. Pointer size should be 32bit, but is 64bit (see `Janet` in bindings.rs)
     } else {
         bindings.ctypes_prefix("::libc")
-    };
+    }
+    .header(header)
+    .derive_debug(true)
+    .use_core()
+    .allowlist_type(allowlist_regex)
+    .allowlist_function(allowlist_regex)
+    .allowlist_var(allowlist_regex)
+    .rustfmt_bindings(true);
 
     #[cfg(windows)]
     let bindings = bindings.clang_args(&["--target=x86_64-pc-windows-gnu"]);
@@ -71,10 +72,6 @@ fn main() {
         let mut build = cc::Build::new();
         if is_wasm {
             build.compiler("emcc");
-            // build.target(&target_arch);
-            // todo: janet_unwrap_integer signature mismatch
-            // (i64) -> i32
-            // (i32) -> i32
         }
 
         build.file("csrc/janet.c").include("csrc");
