@@ -1,4 +1,6 @@
 fn main() {
+    let target_arch = std::env::var("CARGO_CFG_TARGET_ARCH").unwrap();
+    let is_wasm: bool = target_arch == "wasm32" || target_arch == "wasm64";
     // Cause compilation error when both almagation and link-system is set
     #[cfg(all(feature = "link-amalg", feature = "link-system"))]
     compile_error!(r#"You can only use either "link-amalg" or "system" feature, not both."#);
@@ -28,11 +30,26 @@ fn main() {
         .header(header)
         .derive_debug(true)
         .use_core()
-        .ctypes_prefix("::libc")
         .allowlist_type(allowlist_regex)
         .allowlist_function(allowlist_regex)
         .allowlist_var(allowlist_regex)
         .rustfmt_bindings(true);
+
+    let bindings = if is_wasm {
+        let emcc_sysroot = std::env::var("EMSCRIPTEN_SYSROOT").ok().unwrap_or_else(|| {
+            which::which("emcc")
+                .expect("emcc installed")
+                .parent()
+                .unwrap()
+                .join("cache/sysroot")
+                .to_str()
+                .unwrap()
+                .to_owned()
+        });
+        bindings.clang_args(["--sysroot", &emcc_sysroot])
+    } else {
+        bindings.ctypes_prefix("::libc")
+    };
 
     #[cfg(windows)]
     let bindings = bindings.clang_args(&["--target=x86_64-pc-windows-gnu"]);
@@ -51,6 +68,9 @@ fn main() {
 
     #[cfg(all(feature = "link-amalg", not(feature = "link-system")))]
     let mut build = cc::Build::new();
+    if is_wasm {
+        build.compiler("emcc");
+    }
 
     #[cfg(all(feature = "link-amalg", not(feature = "link-system")))]
     build.file("csrc/janet.c").include("csrc");
