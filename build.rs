@@ -67,43 +67,39 @@ fn main() {
     let max_stack = option_env!("JANET_STACK_MAX");
 
     #[cfg(all(feature = "link-amalg", not(feature = "link-system")))]
-    let mut build = cc::Build::new();
-    if is_wasm {
-        build.compiler("emcc");
+    {
+        let mut build = cc::Build::new();
+        if is_wasm {
+            build.compiler("emcc");
+            // build.target(&target_arch);
+            // todo: janet_unwrap_integer signature mismatch
+            // (i64) -> i32
+            // (i32) -> i32
+        }
+
+        build.file("csrc/janet.c").include("csrc");
+
+        if let Some(val) = recursion_guard {
+            build.define("JANET_RECURSION_GUARD", val);
+        }
+
+        if let Some(val) = max_proto_depth {
+            build.define("JANET_MAX_PROTO_DEPTH", val);
+        }
+
+        if let Some(val) = max_macro_expand {
+            build.define("JANET_MAX_MACRO_EXPAND", val);
+        }
+
+        if let Some(val) = max_stack {
+            build.define("JANET_STACK_MAX", val);
+        }
+
+        #[cfg(feature = "debug-symbols")]
+        build.flag("-ggdb3");
+
+        build.compile("janet");
     }
-
-    #[cfg(all(feature = "link-amalg", not(feature = "link-system")))]
-    build.file("csrc/janet.c").include("csrc");
-
-    #[cfg(all(feature = "link-amalg", not(feature = "link-system")))]
-    if let Some(val) = recursion_guard {
-        build.define("JANET_RECURSION_GUARD", val);
-    }
-
-    #[cfg(all(feature = "link-amalg", not(feature = "link-system")))]
-    if let Some(val) = max_proto_depth {
-        build.define("JANET_MAX_PROTO_DEPTH", val);
-    }
-
-    #[cfg(all(feature = "link-amalg", not(feature = "link-system")))]
-    if let Some(val) = max_macro_expand {
-        build.define("JANET_MAX_MACRO_EXPAND", val);
-    }
-
-    #[cfg(all(feature = "link-amalg", not(feature = "link-system")))]
-    if let Some(val) = max_stack {
-        build.define("JANET_STACK_MAX", val);
-    }
-
-    #[cfg(all(
-        feature = "link-amalg",
-        not(feature = "link-system"),
-        feature = "debug-symbols"
-    ))]
-    build.flag("-ggdb3");
-
-    #[cfg(all(feature = "link-amalg", not(feature = "link-system")))]
-    build.compile("janet");
 
     // Write the bindings to the $OUT_DIR/bindings.rs file.
     let out_path = std::path::PathBuf::from(std::env::var("OUT_DIR").unwrap());
